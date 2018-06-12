@@ -1,0 +1,228 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title></title>
+
+	<script src="jquery/jquery-3.2.1.min.js"></script>
+	<script src="leaflet/chartjs/Chart.js"></script>
+	<link rel="stylesheet" href="leaflet/pure/pure.css" type="text/css"/>
+	<link rel="stylesheet" href="leaflet/leaflet.css" type="text/css"/>
+	<script src="leaflet/leaflet.js"></script>
+	<script src="leaflet/peity/jquery.peity.js"></script>
+	<link rel="stylesheet" href="leaflet/markercluster/MarkerCluster.css" type="text/css"/>	 
+	<link rel="stylesheet" href="leaflet/markercluster/MarkerCluster.Default.css" type="text/css"/>	 
+	<script src="leaflet/markercluster/leaflet.markercluster.js"></script>		
+	<link rel="stylesheet" href="leaflet/sidebar/leaflet-sidebar.css" type="text/css"/>	 
+	<script src="leaflet/sidebar/leaflet-sidebar.js"></script>
+	<link rel="stylesheet" href="font/font-awesome.css" type="text/css"/>
+	<link rel="stylesheet" href="leaflet/awesome-markers/leaflet.awesome-markers.css" type="text/css">
+	<script src="leaflet/awesome-markers/leaflet.awesome-markers.js"></script>
+	<script src="leaflet/touchswipe/jquery.touchSwipe.js"></script>
+	<script src="functions.js"></script>
+	<script src="leaflet/markerbouncing/leaflet.smoothmarkerbouncing.js" /></script>
+	<link href='//fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
+	
+	<style>
+		html {
+			height:100%;
+			width: 100%;
+		}		
+		body {
+			position:fixed;
+			padding: 0;
+			margin: 0;
+			height: 100%;
+			width: 100%;
+		}
+		#map {
+				height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<!-- Warning if Javascript is disabled -->
+	<noscript>
+		<div id="noscript_padding"></div>
+	</noscript>
+
+	<!-- Sidebar -->
+	<div id="sidebar" class="sidebar collapsed">
+	
+		<div class="sidebar-tabs" >
+			<ul role="tablist">
+				<li class="touchdependent"><a href="#" id="tbc" role="tab"><i style="font-size:18px;" class="fa fa-bars"></i></a></li>
+				<li name="nohover"><div style="height:100%;width:100%;display:inline-block;"><div id="loader"></div></div></li>
+			</ul>
+			<ul role="tablist">
+				<li class="touchdependent"><a href="#about" role="tab"><i style="font-size:22px;" class="fa fa-info"></i></a></li>
+				<li class="touchdependent"><a href="#contact" role="tab"><i style="font-size:16px;" class="fa fa-envelope"></i></a></li>
+			</ul>
+		</div>
+		
+		<div class="sidebar-content">
+		
+			<div class="sidebar-pane" id="details">
+				<div class="sidebar-header">
+					<span class="title font"></span>
+					<span class="sidebar-close"><i style="font-size:18px;" class="fa fa-chevron-left"></i></span>
+				</div>
+				<div class ="sidebar-text">
+					<canvas id="myChart" style="height: 50%; width: 100%;"></canvas>
+				</div>
+			</div>
+			
+			<div class="sidebar-pane" id="ranking">
+				<div class="sidebar-header">
+					<span class="font" style="font-size: 1.1em;">Ranking</span>
+					<span class="sidebar-close"><i style="font-size:18px;" class="fa fa-chevron-left"></i></span>
+				</div>
+				<div class ="sidebar-text">
+					<div class="table font"></div>
+				</div>
+			</div>
+			
+			<div class="sidebar-pane" id="about">
+				<div class="sidebar-header">
+					<span class="font" style="font-size: 1.1em;">About</span>
+					<span class="sidebar-close"><i style="font-size:18px;" class="fa fa-chevron-left"></i></span>
+				</div>
+				<div  class ="sidebar-text">
+					<div class="text font">
+						To get the precipitation forecast for the upcoming days at a specific climbing spot, simply click its corresponding marker.<br/></br>
+						To compare all climbing spots in a certain range, first define the origin 
+						<span class="leaflet-bar leaflet-control leaflet-control-custom disabled" style="display:inline-flex; float:none">
+							<a class="" href="#" onClick="return false;" style="width: 20px; height: 20px; cursor: default; background-image: url('icons/marker.png'); background-size: 15px 15px; outline: medium none currentcolor;"></a>
+						</span>. 
+						Then, enlarge 
+						<span class="leaflet-bar leaflet-control leaflet-control-custom disabled" style="display:inline-flex; float:none">
+							<a class="" href="#" onClick="return false;" style="width: 20px; height: 20px; cursor: default; background-image: url('icons/enlarge.png'); background-size: 15px 15px; outline: medium none currentcolor;"></a>
+						</span>
+						or shrink 
+						<span class="leaflet-bar leaflet-control leaflet-control-custom disabled" style="display:inline-flex; float:none">
+							<a class="" href="#" onClick="return false;" style="width: 20px; height: 20px; cursor: default; background-image: url('icons/shrink.png'); background-size: 15px 15px; outline: medium none currentcolor;"></a>
+						</span> 
+						the circle to your desired range. The dropdown menus enable you to narrow down the time range. Finally, compare
+						<span class="leaflet-bar leaflet-control leaflet-control-custom disabled" style="display:inline-flex; float:none">
+							<a class="" href="#" onClick="return false;" style="width: 20px; height: 20px; cursor: default; background-image: url('icons/search.png'); background-size: 15px 15px; outline: medium none currentcolor;"></a>
+						</span> 
+						and pick out the right spot for you!<br><br>
+						The data used for the forecast is updated every 6 hours and originates from the <a href="https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs">Global Forecast System</a>, a model with a 0.25° grid resolution.
+					</div>
+				</div>
+			</div>
+			
+			<div class="sidebar-pane" id="contact">
+				<div class="sidebar-header">
+					<span class="font" style="font-size: 1.1em;">Contact</span>
+					<span class="sidebar-close"><i style="font-size:18px;" class="fa fa-chevron-left"></i></span>
+				</div>
+				<div  class ="sidebar-text">
+					<div class="text font">
+						If you have any request or encounter any problem, please send an email at:</br></br><a href="mailto:example@email.com">example@email.com</a>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+	</div>
+
+	<!-- Map -->
+	<div id="map" class="sidebar-map"></div>
+	
+	<script>
+
+		//MAP, CONTROLS, ETC. DEFINITION
+		var contrast  = L.tileLayer('//a.tiles.mapbox.com/v4/mapbox.high-contrast/{z}/{x}/{y}.png?access_token=TOKEN', {noWrap: true});			
+		
+		var map = L.map('map', {
+			attributionControl: false,
+			center: [48.137154, 11.576124],
+			zoom: 5,
+			layers: contrast,
+			zoomControl:false,
+			maxZoom: 17,
+			minZoom: 2,
+			doubleClickZoom: false,
+			worldCopyJump: true
+		});
+		
+		map.on('click', move_ref_marker);
+
+		var sidebar, scale, markers, markers_ref, pin_control, circle_controls, search_control, ref_marker, circle, ddm_begin, ddm_end, myBarChart; //ddm = drop-down-menu
+		
+		sidebar = L.control.sidebar('sidebar');
+		sidebar.addTo(map);
+		
+		scale = L.control.scale({position: 'bottomright'});
+		scale.addTo(map);
+		
+		markers_ref = {};
+		markers = load_spots('./spots/list.json');
+		markers.addTo(map);
+		
+		pin_control = create_pin_control({position: 'topleft'});
+		pin_control.addTo(map);
+			
+		ddm_begin = create_dropdownmenu({position: 'topright', id: 'From', title: 'Starting from...'});
+		ddm_end = create_dropdownmenu({position: 'topright', id: 'To', title: 'Ending at...'});
+
+		//CLICKME EVENT FOR FIRST VISITORS
+		$(document).ready(function() {
+			if (!readCookie('example')) {
+				$('a[href="#about"] .fa').addClass('first');
+				createCookie('example', "1", 1000);
+			}
+		});
+		
+		//DISABLE HOVER IF TOUCH DEVICE
+		var isTouchEnabled = false;
+		if(!!('ontouchstart' in window) || window.navigator.msMaxTouchPoints > 0){
+			$('.touchdependent').attr('name','nohover');
+			isTouchEnabled = true;
+		}
+		
+		//ADAPTS TITLE ON WINDOW RESIZE
+		window.addEventListener('resize', function(event){
+			if($('#sidebar').width() != 40){
+				adaptTitle();
+			}
+		}, false);
+		
+		//ENABLES SWIPE-LEFT CLOSE ACTION
+		/*$('.sidebar-content').swipe({
+			swipeLeft:function(event, direction, distance, duration, fingerCount) {
+				location.hash = '';
+			}
+		});*/
+		
+		L.Marker.setBouncingOptions({
+			bounceHeight : 10,   // height of the bouncing
+			bounceSpeed  : 54,   // bouncing speed coefficient
+			exclusive    : true,
+		});
+
+		//HASHCHANGE LISTENER
+		$(window).bind('hashchange load', function(e) {
+			if(location.hash=='#about') $('a[href="#about"] .first').removeClass('first');
+			
+			if (location.hash == '')
+				sidebar.close();
+			else if ($.inArray(location.hash,['#ranking','#about','#contact']) >= 0){
+				sidebar.open(location.hash.substring(1),'');
+			}
+			else if (location.hash.indexOf('&') !== -1)
+				show_overlay(location.hash.substring(1,location.hash.indexOf('&')));
+			else
+				show_overlay(location.hash.substring(1));
+		});
+
+	</script>
+	<noscript>
+		<div id='noscript_warning'>Please enable Javascript and reload the page</div>
+	</noscript>   
+</body>
+</html>

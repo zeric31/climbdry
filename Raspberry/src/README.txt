@@ -1,0 +1,11 @@
+- unzip, configure and install ZLIB.
+- libz.a should appear in /usr/local/lib
+
+- unzip DEGRIB
+- in src/degrib/Makefile.in:
+	- (#37,39,47,198) change references to "../zlib/libz.a" and "-L../zlib, to "/usr/local/lib/libz.a" and "-L/usr/local/lib/libz.a" respectively
+  	- (#207) replace "all: $(PRJ_NAME) $(CLOCK_NAME) $(DP_NAME) $(DRAWSHP_NAME) $(TCL_NAME) $(TK_NAME)" to "all: $(PRJ_NAME) $(CLOCK_NAME) $(DP_NAME) $(DRAWSHP_NAME)"
+	- (#248,249) comment lines
+- in src/Makefile.in:
+	- (#158-164,217-225) comment lines
+- configure and install DEGRIB
